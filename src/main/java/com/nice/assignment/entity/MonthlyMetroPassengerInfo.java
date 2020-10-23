@@ -10,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-public class MonthlyPassengerInfo {
+public class MonthlyMetroPassengerInfo{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long seq;
