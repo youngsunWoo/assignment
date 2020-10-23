@@ -26,6 +26,7 @@ dependencies {
 
 	compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.4.8'
 
+	compile group: 'com.univocity', name: 'univocity-parsers', version: '2.1.1'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
