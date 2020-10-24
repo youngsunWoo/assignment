@@ -5,6 +5,8 @@ import com.nice.assignment.dto.ConditionParamDto;
 import com.nice.assignment.dto.MetaDataInfo;
 import com.nice.assignment.dto.PassengerCountDto;
 import com.nice.assignment.service.PassengerStatisticsService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class SeoulMetroController {
     PassengerStatisticsService passengerStatisticsService;
 
     @PostMapping("/upload/passengers")
+    @Parameter(in = ParameterIn.HEADER, name = "X-AUTH-TOKEN")
     public ResponseEntity saveMonthlyPassengerInfo(@RequestBody MetaDataInfo metaDataInfo) {
         passengerStatisticsService.saveMonthlyData(metaDataInfo.getYear(), metaDataInfo.getFilename());
         return ResponseEntity.ok().build();

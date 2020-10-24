@@ -9,6 +9,7 @@ import com.nice.assignment.auth.responce.ApiResponseCode;
 import com.nice.assignment.config.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
 
-@Tag(name = "Authentication API", description = "권한 관련 API(회원가입/로그인,토큰갱신)")
+@Tag(name = "Authentication API", description = "권한 관련 API(회원가입/로그인/토큰갱신)")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(value = "/v1")
@@ -58,14 +59,12 @@ public class SignController {
     }
 
     @Operation(summary = "토큰 갱신", description = "토큰 갱신 API")
-    @Parameter()
+    @Parameter(in = ParameterIn.HEADER, name = "X-AUTH-TOKEN", description = "API 인증토큰")
     @PostMapping(value = "/token")
     public ApiResponse signup() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
         return ApiResponse.of(jwtTokenProvider.createToken(String.valueOf(user.getMsrl()), user.getRoles()));
-
-//        return ApiResponse.of(jwtTokenProvider.createToken(String.valueOf(user.getMsrl()), user.getRoles()));
     }
 }
