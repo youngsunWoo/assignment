@@ -4,8 +4,8 @@ package com.nice.assignment.controller;
 import com.nice.assignment.dto.ConditionParamDto;
 import com.nice.assignment.dto.MetaDataInfo;
 import com.nice.assignment.dto.PassengerCountDto;
-import com.nice.assignment.dto.PassengerDiffrentCountDto;
 import com.nice.assignment.service.PassengerStatisticsService;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,23 +23,23 @@ public class SeoulMetroController {
     @Autowired
     PassengerStatisticsService passengerStatisticsService;
 
-    @PostMapping("/passengers")
+    @PostMapping("/upload/passengers")
     public ResponseEntity saveMonthlyPassengerInfo(@RequestBody MetaDataInfo metaDataInfo) {
         passengerStatisticsService.saveMonthlyData(metaDataInfo.getYear(), metaDataInfo.getFilename());
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/passengers/daily/average")
+    @PostMapping("/data/passengers/daily/average")
     public List<PassengerCountDto> getAverageDaily(@RequestBody ConditionParamDto conditionParamDto) {
         return passengerStatisticsService.getDailyCountRank(conditionParamDto);
     }
 
-    @PostMapping("/passengers/monthly/average")
+    @PostMapping("/data/passengers/monthly/average")
     public List<PassengerCountDto> getAverageMonthly(@RequestBody ConditionParamDto conditionParamDto) {
         return passengerStatisticsService.getMonthlyCountRank(conditionParamDto);
     }
 
-    @PostMapping("/passengers/monthly/difference")
+    @PostMapping("/data/passengers/monthly/difference")
     public List<PassengerCountDto> getdifference(@RequestBody ConditionParamDto conditionParamDto) {
         return passengerStatisticsService.getMonthlyDiffRank(conditionParamDto);
     }

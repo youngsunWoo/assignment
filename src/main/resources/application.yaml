@@ -9,6 +9,8 @@ spring:
   h2:
     console:
       enabled: true
+  jwt:
+    secret: sunny@assignment
 
 hibernate:
   hbm2ddl:
@@ -22,6 +24,8 @@ springdoc:
     path: /swagger-ui.html
     displayRequestDuration: true
     groups-order: DESC
+
+
 
 subway:
   file-path:

@@ -21,12 +21,17 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
 	compile 'com.h2database:h2'
 
+	//for api document
 	compile group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.4.8'
 
+	//for csv Parser
 	compile group: 'com.univocity', name: 'univocity-parsers', version: '2.1.1'
+
+	//fot authentication
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
