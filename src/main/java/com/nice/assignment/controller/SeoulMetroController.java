@@ -1,9 +1,10 @@
 package com.nice.assignment.controller;
 
 
+import com.nice.assignment.dto.ConditionParamDto;
 import com.nice.assignment.dto.MetaDataInfo;
-import com.nice.assignment.dto.MetroPassengerCountDto;
-import com.nice.assignment.entity.MetroPassengerCount;
+import com.nice.assignment.dto.PassengerCountDto;
+import com.nice.assignment.dto.PassengerDiffrentCountDto;
 import com.nice.assignment.service.PassengerStatisticsService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -23,22 +24,23 @@ public class SeoulMetroController {
     PassengerStatisticsService passengerStatisticsService;
 
     @PostMapping("/passengers")
-    public ResponseEntity addPassengerTotals(@RequestBody MetaDataInfo metaDataInfo) {
-        passengerStatisticsService.addMonthlyData(metaDataInfo.getYear(), metaDataInfo.getFilename());
+    public ResponseEntity saveMonthlyPassengerInfo(@RequestBody MetaDataInfo metaDataInfo) {
+        passengerStatisticsService.saveMonthlyData(metaDataInfo.getYear(), metaDataInfo.getFilename());
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/passengers/{year}/daily")
-    public List<MetroPassengerCountDto> getPassengersDaily(@PathVariable("year") Long year,
-                                                           @RequestParam boolean ascending,
-                                                           @RequestParam Long rankNum) {
-        return passengerStatisticsService.getDailyCountRank(year, ascending, rankNum);
+    @PostMapping("/passengers/daily/average")
+    public List<PassengerCountDto> getAverageDaily(@RequestBody ConditionParamDto conditionParamDto) {
+        return passengerStatisticsService.getDailyCountRank(conditionParamDto);
     }
 
-    @GetMapping("/passengers/{year}//monthly")
-    public List<MetroPassengerCountDto> getPassengersMonthly(@PathVariable("year") Long year,
-                                                             @RequestParam boolean ascending,
-                                                             @RequestParam Long rankNum) {
-        return passengerStatisticsService.getMonthlyCountRank(year, ascending, rankNum);
+    @PostMapping("/passengers/monthly/average")
+    public List<PassengerCountDto> getAverageMonthly(@RequestBody ConditionParamDto conditionParamDto) {
+        return passengerStatisticsService.getMonthlyCountRank(conditionParamDto);
+    }
+
+    @PostMapping("/passengers/monthly/difference")
+    public List<PassengerCountDto> getdifference(@RequestBody ConditionParamDto conditionParamDto) {
+        return passengerStatisticsService.getMonthlyDiffRank(conditionParamDto);
     }
 }

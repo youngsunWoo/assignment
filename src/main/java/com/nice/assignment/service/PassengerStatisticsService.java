@@ -1,6 +1,8 @@
 package com.nice.assignment.service;
 
-import com.nice.assignment.dto.MetroPassengerCountDto;
+import com.nice.assignment.dto.ConditionParamDto;
+import com.nice.assignment.dto.PassengerCountDto;
+import com.nice.assignment.dto.PassengerDiffrentCountDto;
 import com.nice.assignment.entity.MonthlyMetroPassengerInfo;
 import com.nice.assignment.repository.MonthlyPassengerInfoRepository;
 import com.univocity.parsers.common.record.Record;
@@ -25,35 +27,32 @@ public class PassengerStatisticsService {
     private final MonthlyPassengerInfoRepository monthlyPassengerInfoRepository;
 
     @Transactional
-    public List<MonthlyMetroPassengerInfo> addMonthlyData(Long year, String fileName) {
+    public List<MonthlyMetroPassengerInfo> saveMonthlyData(Long year, String fileName) {
         return monthlyPassengerInfoRepository.saveAll(
-                convertToPassengerTotal(parseCsvService.parseCsvWithHeader(monthlyFilePath + fileName), year));
+                convertToMonthlyMetroPassengerInfo(parseCsvService.parseCsvWithHeader(monthlyFilePath + fileName), year));
     }
 
-    public List<MetroPassengerCountDto> getDailyCountRank(Long year, boolean ascending, Long rankNum) {
-        monthlyPassengerInfoRepository.getYearlyCount(year);
-
-        return monthlyPassengerInfoRepository.getYearlyCount(year).stream()
-                .map(MetroPassengerCountDto::of)
-                .sorted(ascending ?
-                        Comparator.comparing(MetroPassengerCountDto::getPassengerCount) :
-                        Comparator.comparing(MetroPassengerCountDto::getPassengerCount).reversed())
-                .limit(rankNum)
+    public List<PassengerCountDto> getDailyCountRank(ConditionParamDto conditionParamDto) {
+        return monthlyPassengerInfoRepository.getYearlyCount(conditionParamDto.getYear()).stream()
+                .map(PassengerCountDto::of)
+                .sorted(conditionParamDto.isAscending() ?
+                        Comparator.comparing(PassengerCountDto::getPassengerCount) :
+                        Comparator.comparing(PassengerCountDto::getPassengerCount).reversed())
+                .limit(conditionParamDto.getRankNum())
                 .map(m -> {
-                    m.setPassengerCount(year % 4 == 0 ? m.getPassengerCount() / 366 : m.getPassengerCount() / 365);
-                    return m; })
+                    m.setPassengerCount(conditionParamDto.getYear() % 4 == 0 ? m.getPassengerCount() / 366 : m.getPassengerCount() / 365);
+                    return m;
+                })
                 .collect(Collectors.toList());
     }
 
-    public List<MetroPassengerCountDto> getMonthlyCountRank(Long year, boolean ascending, Long rankNum) {
-        monthlyPassengerInfoRepository.getYearlyCount(year);
-
-        return monthlyPassengerInfoRepository.getYearlyCount(year).stream()
-                .map(MetroPassengerCountDto::of)
-                .sorted(ascending ?
-                        Comparator.comparing(MetroPassengerCountDto::getPassengerCount) :
-                        Comparator.comparing(MetroPassengerCountDto::getPassengerCount).reversed())
-                .limit(rankNum)
+    public List<PassengerCountDto> getMonthlyCountRank(ConditionParamDto conditionParamDto) {
+        return monthlyPassengerInfoRepository.getYearlyCount(conditionParamDto.getYear()).stream()
+                .map(PassengerCountDto::of)
+                .sorted(conditionParamDto.isAscending() ?
+                        Comparator.comparing(PassengerCountDto::getPassengerCount) :
+                        Comparator.comparing(PassengerCountDto::getPassengerCount).reversed())
+                .limit(conditionParamDto.getRankNum())
                 .map(m -> {
                     m.setPassengerCount(m.getPassengerCount() / 12);
                     return m;
@@ -61,7 +60,24 @@ public class PassengerStatisticsService {
                 .collect(Collectors.toList());
     }
 
-    private List<MonthlyMetroPassengerInfo> convertToPassengerTotal(List<Record> Records, Long year) {
+    public List<PassengerCountDto> getMonthlyDiffRank(ConditionParamDto conditionParamDto) {
+        return monthlyPassengerInfoRepository.getDiffMaxAndMin(conditionParamDto.getYear()).stream()
+                .map(PassengerDiffrentCountDto::of)
+                .sorted(conditionParamDto.isAscending() ?
+                        Comparator.comparing(PassengerDiffrentCountDto::getDiff) :
+                        Comparator.comparing(PassengerDiffrentCountDto::getDiff).reversed())
+                .limit(conditionParamDto.getRankNum())
+                .map(m -> {
+                            return PassengerCountDto.builder()
+                                    .stationName(m.getStationName())
+                                    .passengerCount(m.getDiff())
+                                    .build();
+                        }
+                )
+                .collect(Collectors.toList());
+    }
+
+    private List<MonthlyMetroPassengerInfo> convertToMonthlyMetroPassengerInfo(List<Record> Records, Long year) {
         List<MonthlyMetroPassengerInfo> list = new ArrayList<>();
         for (Record record : Records) {
             for (int i = 1; i < 13; i++) {

@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @Entity
-public class MetroPassengerCount {
+public class PassengerCount {
     @Id
     private String stationName;
     private Long passengerCount;
