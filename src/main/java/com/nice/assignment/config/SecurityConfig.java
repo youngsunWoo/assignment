@@ -3,6 +3,7 @@ package com.nice.assignment.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -31,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/*/sign-in", "/*/sign-up").permitAll()
-                .antMatchers( "/*/*/data/**").permitAll() // 조회 API 누구나 접근가능
+                .antMatchers( HttpMethod.GET,"/*/seoul-metro/**").permitAll() // 조회 API는 누구나 접근가능
                 .anyRequest().hasRole("ADMIN")
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // jwt token 필터를 id/password 인증 필터 전에 넣는다

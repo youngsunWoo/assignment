@@ -3,16 +3,19 @@
 ## 목차
 - [개발환경 및 라이브러리](#개발환경-및-라이브러리)
 - [빌드 및 실행](#빌드-및-실행)
-- [과제 요구사항](#과제-요구사항)
 - [과제 요구사항 및 결과](#과제-요구사항-및-결과)
-- [과제 해결](#과제-해결)
+- [고려 사항](#고려-사항)
 - [시연](#시연)
 
 
 ## 빌드 및 실행
 ### 터미널 환경
-Java, Docker는 설치되어 있다고 가정한다.
+Java(openjdk.8), Docker는 설치되어 있다고 가정한다.
 
+**Builf the Application** 
+```
+$ ./gradlew build
+```
 **Run the Application** 
 ```
 $ ./gradlew bootRun
@@ -25,8 +28,13 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 
 ## 개발환경 및 라이브러리
 
-#### Spring 2.3  
-- 도커 컨테이너 환경으로 실행 할 수 있도록 이미지 빌드를 지원하는 2.3.X 버전을 사용
+#### openkdk 1.8
+- 무료로 사용 가능한 오픈소스 기반의 openjdk.8 버전을 사용
+
+#### Spring 2.3.4
+- 도커 컨테이너 환경으로 실행 할 수 있도록 공식적으로 이미지 빌드를 지원하는 2.3.X 이상의 버전
+- 그 중 현재(2020.10) 가장 최신 버전인 2.3.4 사용
+
 
 #### Spring Security
 - REST API 인증(Authentication) 구현  
@@ -38,11 +46,22 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - DBMS/구조변경 등의 유지보수성을 고려 
 - 비슷한 조건으로 빈번한 조회가 될 상황을 고려해 캐싱기능을 제공하는 JPA를 사용해 성능향상
 
-#### log4j
+#### log-back
 - 로깅처리
+- SLF4J의 구현체로 다른 로깅프레임웤 전환시에도 용이 
+- 스프링 부트의 기본으로 포함되어 있어 별도로 라이브러리 추가가 필요없으며 application.properties 설정으로 적용가능 
+- log4j, log4j2에 비해 성능이 우수함
+
 
 #### Springdoc
 - API 문서 작성 및 시연화면 구현
+- Spring fox에 비해 후발주자로 사용성이 편리하고 버그대응을 잘하는 Springdoc 사용
+- Springdoc vs Springfox  
+
+|구분|출시|릴리즈현황|기타|
+|--|-----|---|---|
+|Springdoc|2019년 7월(v.0.0.4) |출시이후 꾸준히 릴리즈| 정식버전에서 WebFlux지원|
+|Springfox|2015년 6월(v.2.0.1)|2018.06-2020.06까지 약 2년간 중단<br>최근 다시 릴리즈| 정식버전에서 WebFlux 지원불가|
 
 #### UniVocity Parsers
 - CSV 파일 파싱 구현
@@ -50,19 +69,44 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - 라이브러리 선정기준   
     - 안정성   
         - 사용량이 가장 많은 라이브러리 Top 10중에 선정  
-        - 2020이전 릴리즈 되지 않은 라이브러리 제외  
+        - 2020이전 릴리즈 되지 않은 라이브러리 제외 
     - 성능  
         - JDK8 기준 가장 처리속도가 빠른 라이브러리 Top 10 선정
         - 성능측정 조건 : JDK 8 / 3,173,958 rows / 모든 data에 "(quotes)가 존재 경우  
+- CSV 파싱 라이브러리 사용현황  
 
+|순위|라이브러리 명|사용량|최신 릴리즈|
+|--|-----|---|---|
+|1 |Apache Commons CSV            | 763 usages |2020.02|
+|2 | ~~OpenCSV~~                  | 608 usages |2011.07|
+|3 |OpenCSV                       | 316 usages |2020.05|
+|4 |~~JDBI~~                      | 200 usages |2017.01|
+|5 |Data CSV                      | 159 usages |2020.02|
+|6 |Jackson Dataformat CSV        | 134 usages |2020.10|
+|7 |~~Super CSV Core~~            | 132 usages |2015.10|
+|8 |**`UniVocity Parsers`**       | 125 usages |2020.08|
+|9 |~~Scala CSV~~                 | 85 usages  |2019.10|
+|10|~~Java CVS Reader and Writer~~| 70 usages  |2008.02|
+ 
+- CSV 파싱 라이브러리 성능비교  
 
+|순위|라이브러리|평균속도|	성능대비 % |최소수행시간 |최대수행시간|
+|--|------|-----|---|---|---|
+|1|**`uniVocity CSV parser`**|	855 ms|	Best time!|	839 ms|	870 ms
+|2|SimpleFlatMapper CSV parser|	964 ms|	12%	|959 ms|	971 ms
+|3|Jackson CSV parser|	1023 ms|	19%	|1009 ms|	1058 ms
+|4|Diergo Easy CSV Streamable|	1385 ms|	61%	|1378 ms|	1394 ms
+|5|Product Collections parser|	1388 ms|	62%	|1386 ms|	1391 ms
+|6|Java CSV Parser|	1642 ms|	92%	|1635 ms|	1650 ms
+|7|JCSV Parser|	1756 ms|	105%	|1739 ms|	1765 ms
+|8|Simple CSV parser|	1813 ms	|112%	| 1804 ms |	1841 ms
+|9|Gen-Java CSV|	1954 ms|	128%	|1950 ms|	1961 ms
+|10|SuperCSV|	1989 ms|	132%	|1975 ms|	2001 ms
 
 ## 과제 요구사항 및 결과
-
 ### 필수사항
 #### 1. API 명세서 작성
-
-Response
+- sewgger 문서로 대체
 #### 2. 데이터파일(.csv)의 각 레코드를 데이터베이스에 저장하는 API 개발
 - Request
   - url
@@ -265,13 +309,34 @@ Response
   }
   ```
 
-## 과제 해결
-#### API설계
-- RESTFUL API
-
-#### API 구현
+## 고려 사항 
 
 #### API 인증
+- 데이터파일(.csv)저장 API는 인증 필요 
+- 조회 API는 누구나 사용 가능
+ 
+#### API 설계
+- REST API 
+  - HTTP Method와 URI만으로 API의 기능을 유추 가능
+    - HTTP Method   
+      >GET : 조회    
+      >POST : 저장  
+    - URI  
+      >/v1/seoul-metro/passengers/daliy/average  
+      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/(일간)/&nbsp;&nbsp;(평균)   
+      >/v1/seoul-metro/passengers/monthly/average  
+      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;(월간)&nbsp;&nbsp;/&nbsp;&nbsp;(평균) 
+      
+- 확장성/재사용성 
+  - 다른 연도의 자료가 들어오더라도 대응 가능
+     - 저장할 데이터의 연도를 request parmeter으로 전달 받아 저장 
+    - 조회시 연도를 request parmeter로 전달받아 조건으로 사용
+  - 파일이름이나 경로가 변경되도라도 대능 가능  
+    - 파일명을 request parmeter로 전달 받음  
+    - 파일 경로는 apllication.yaml에 명시해 변수로 주입받아 사용   
+  - 요구사항이 변화되더라도 소스 변경없이 적용 가능
+    - 상위/하위 : 정렬기준을 request parmeter로 전달받아 조건으로 사용 
+    - 출력 갯수 : 출력할 갯수를 request parmeter로 전달받아 조건으로 사용
 
 #### DB 인덱싱
 - DB INDEX
@@ -280,8 +345,7 @@ Response
   - 이후 주 요청은 `조회(read)`로 예상
   - 따라서 index를 추가해도 입력/수정/삭제의 성능 저하보다 조회의 성능 향상을 우선하여 인덱스를 생성
 
-#### API 인증
-
 
 ## 시연
-[http://localhost:8080](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config/)
+- 참고용 과제실행화면
+- [http://localhost:8080](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config/)
