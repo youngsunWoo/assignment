@@ -29,9 +29,13 @@ dependencies {
 	//for csv Parser
 	compile group: 'com.univocity', name: 'univocity-parsers', version: '2.1.1'
 
-	//fot authentication
+	//for authentication
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+	//for logging
+	compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.13.3'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.13.3'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'

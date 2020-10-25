@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @Getter
 @Setter
+@ToString
 @SuperBuilder
 @NoArgsConstructor
 public class PassengerCountDto {
