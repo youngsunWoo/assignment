@@ -1,7 +1,7 @@
 package com.nice.assignment.metro.controller;
 
 
-import com.nice.assignment.auth.responce.ApiResponse;
+import com.nice.assignment.common.response.ApiResponse;
 import com.nice.assignment.metro.dto.ConditionParamDto;
 import com.nice.assignment.metro.dto.FileInfo;
 import com.nice.assignment.metro.dto.PassengerCountDto;
@@ -12,7 +12,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -36,20 +35,20 @@ public class SeoulMetroController {
     }
 
     @PostMapping("/data/passengers/daily/average")
-    public List<PassengerCountDto> getAverageDaily(@RequestBody ConditionParamDto conditionParamDto) {
+    public ApiResponse<List<PassengerCountDto>> getAverageDaily(@RequestBody ConditionParamDto conditionParamDto) {
         log.debug("{}\tprams={}", ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(), conditionParamDto.toString());
-        return passengerStatisticsService.getDailyCountRank(conditionParamDto);
+        return ApiResponse.of(passengerStatisticsService.getDailyCountRank(conditionParamDto));
     }
 
     @PostMapping("/data/passengers/monthly/average")
-    public List<PassengerCountDto> getAverageMonthly(@RequestBody ConditionParamDto conditionParamDto) {
+    public ApiResponse<List<PassengerCountDto>> getAverageMonthly(@RequestBody ConditionParamDto conditionParamDto) {
         log.debug("{}\tprams={}", ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(), conditionParamDto.toString());
-        return passengerStatisticsService.getMonthlyCountRank(conditionParamDto);
+        return ApiResponse.of(passengerStatisticsService.getMonthlyCountRank(conditionParamDto));
     }
 
     @PostMapping("/data/passengers/monthly/difference")
-    public List<PassengerCountDto> getdifference(@RequestBody ConditionParamDto conditionParamDto) {
+    public ApiResponse<List<PassengerCountDto>> getdifference(@RequestBody ConditionParamDto conditionParamDto) {
         log.debug("{}\tprams={}", ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(), conditionParamDto.toString());
-        return passengerStatisticsService.getMonthlyDiffRank(conditionParamDto);
+        return ApiResponse.of(passengerStatisticsService.getMonthlyDiffRank(conditionParamDto));
     }
 }

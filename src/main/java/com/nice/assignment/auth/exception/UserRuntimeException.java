@@ -1,6 +1,6 @@
 package com.nice.assignment.auth.exception;
 
-import com.nice.assignment.auth.responce.ApiResponseCode;
+import com.nice.assignment.common.response.ApiResponseCode;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

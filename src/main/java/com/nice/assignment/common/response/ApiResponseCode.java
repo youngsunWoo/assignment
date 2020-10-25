@@ -1,4 +1,4 @@
-package com.nice.assignment.auth.responce;
+package com.nice.assignment.common.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

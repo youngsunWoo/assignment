@@ -67,7 +67,7 @@ Response
 - Request
   - url
   ```
-  http://localhost:8080/seoul-metro/data/passengers/daily/average
+  http://localhost:8080/v1/seoul-metro/data/passengers/daily/average
   ```
   - header
   ```
@@ -81,77 +81,81 @@ Response
   }
   ```  
 - Response
-
-{
-  "code": 200,
-  "msg": "OK"
-}
-
+  ```
+    {
+      "code": 200,
+      "msg": "OK"
+    }
+  ```
 #### 3. 일평균 인원이 가장 많은 상위 10개의 역 명과 인원 수를 출력하는 API 개발
 - Request
   - url
   ```
-  http://localhost:8080/seoul-metro/data/passengers/daily/average
+  http://localhost:8080/v1/seoul-metro/data/passengers/daily/average
   ```
   - parameter
   ```
   {
     "year": 2019,        //조회 대상 연도
-    "ascending": false,   //정렬기준(true:오름차순, false:내림차순 )
+    "ascending": false,  //정렬기준(true:오름차순, false:내림차순 )
     "rankNum": 10        //출력갯수
   }
   ```  
 - Response
-  ```
-  [
-      {
-        "stationName": "강남",
-        "passengerCount": 202174
-      },
-      {
-        "stationName": "잠실(2)",
-        "passengerCount": 170721
-      },
-      {
-        "stationName": "홍대입구",
-        "passengerCount": 167872
-      },
-      {
-        "stationName": "신림",
-        "passengerCount": 139189
-      },
-      {
-        "stationName": "구로디지털단지",
-        "passengerCount": 126034
-      },
-      {
-        "stationName": "고속터미널(3)",
-        "passengerCount": 121245
-      },
-      {
-        "stationName": "삼성",
-        "passengerCount": 121183
-      },
-      {
-        "stationName": "신도림",
-        "passengerCount": 118081
-      },
-      {
-        "stationName": "서울역(1)",
-        "passengerCount": 111771
-      },
-      {
-        "stationName": "서울대입구",
-        "passengerCount": 105143
-      }
-  ]
+   ```
+    {
+      "code": 200,
+      "msg": "OK",
+      "data": [
+        {
+          "stationName": "강남",
+          "passengerCount": 202174
+        },
+        {
+          "stationName": "잠실(2)",
+          "passengerCount": 170721
+        },
+        {
+          "stationName": "홍대입구",
+          "passengerCount": 167872
+        },
+        {
+          "stationName": "신림",
+          "passengerCount": 139189
+        },
+        {
+          "stationName": "구로디지털단지",
+          "passengerCount": 126034
+        },
+        {
+          "stationName": "고속터미널(3)",
+          "passengerCount": 121245
+        },
+        {
+          "stationName": "삼성",
+          "passengerCount": 121183
+        },
+        {
+          "stationName": "신도림",
+          "passengerCount": 118081
+        },
+        {
+          "stationName": "서울역(1)",
+          "passengerCount": 111771
+        },
+        {
+          "stationName": "서울대입구",
+          "passengerCount": 105143
+        }
+      ]
+    }
   ```
 
 #### 4. 월 인원수 평균이 가장 낮은 역 명과 인원수를 출력하는 API 개발
 - Request
   - url
   ```
-  http://localhost:8080/seoul-metro/data/passengers/monthly/average
+  http://localhost:8080/v1/seoul-metro/data/passengers/monthly/average
   ```
   - parameter
   ```
@@ -163,30 +167,38 @@ Response
   ```  
 - Response
   ```
-    [
-      {
-        "stationName": "둔촌오륜",
-        "passengerCount": 38808
-      }
-    ]
+    {
+      "code": 200,
+      "msg": "OK",
+      "data": [
+        {
+          "stationName": "둔촌오륜",
+          "passengerCount": 38808
+        }
+      ]
+    }
   ```
 
 #### 5. 월 인원수 최대 최소의 차이가 가장 큰 역 명을 출력하는 API 개발
 - Request
   - url
   ```
-  http://localhost:8080/seoul-metro/data/passengers/monthly/difference
+  http://localhost:8080/v1/seoul-metro/data/passengers/monthly/difference
   ```
   - parameter
 - Response
 
-  ```
-  [
+  ``` ```
     {
-      "stationName": "강남",
-      "passengerCount": 1350567
+      "code": 200,
+      "msg": "OK",
+      "data": [
+          {
+            "stationName": "강남",
+            "passengerCount": 1350567
+          }
+      ]
     }
-  ]
   ```  
 ### 선택사항 - API 인증(Authentication)
 #### 1. 회원가입 

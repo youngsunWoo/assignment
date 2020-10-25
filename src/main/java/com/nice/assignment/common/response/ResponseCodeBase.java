@@ -1,4 +1,4 @@
-package com.nice.assignment.auth.responce;
+package com.nice.assignment.common.response;
 
 public interface ResponseCodeBase {
     int getCode();

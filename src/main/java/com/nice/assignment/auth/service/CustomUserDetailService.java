@@ -2,7 +2,7 @@ package com.nice.assignment.auth.service;
 
 import com.nice.assignment.auth.exception.UserRuntimeException;
 import com.nice.assignment.auth.repository.UserJpaRepository;
-import com.nice.assignment.auth.responce.ApiResponseCode;
+import com.nice.assignment.common.response.ApiResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,4 +1,4 @@
-package com.nice.assignment.auth.responce;
+package com.nice.assignment.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

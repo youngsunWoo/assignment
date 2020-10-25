@@ -1,6 +1,6 @@
 package com.nice.assignment.auth.exception;
 
-import com.nice.assignment.auth.responce.ApiResponse;
+import com.nice.assignment.common.response.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
