@@ -1,4 +1,4 @@
-package com.nice.assignment.dto;
+package com.nice.assignment.metro.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

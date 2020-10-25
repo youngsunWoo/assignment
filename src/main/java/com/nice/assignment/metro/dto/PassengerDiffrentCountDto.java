@@ -1,6 +1,6 @@
-package com.nice.assignment.dto;
+package com.nice.assignment.metro.dto;
 
-import com.nice.assignment.entity.PassengerDiffrentCount;
+import com.nice.assignment.metro.entity.PassengerDiffrentCount;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,6 @@
-package com.nice.assignment.dto;
+package com.nice.assignment.metro.dto;
 
-import com.nice.assignment.entity.PassengerCount;
+import com.nice.assignment.metro.entity.PassengerCount;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

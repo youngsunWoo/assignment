@@ -1,18 +1,20 @@
-package com.nice.assignment.controller;
+package com.nice.assignment.metro.controller;
 
 
-import com.nice.assignment.dto.ConditionParamDto;
-import com.nice.assignment.dto.MetaDataInfo;
-import com.nice.assignment.dto.PassengerCountDto;
-import com.nice.assignment.service.PassengerStatisticsService;
+import com.nice.assignment.auth.responce.ApiResponse;
+import com.nice.assignment.metro.dto.ConditionParamDto;
+import com.nice.assignment.metro.dto.FileInfo;
+import com.nice.assignment.metro.dto.PassengerCountDto;
+import com.nice.assignment.metro.service.PassengerStatisticsService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -27,9 +29,9 @@ public class SeoulMetroController {
 
     @PostMapping("/upload/passengers")
     @Parameter(in = ParameterIn.HEADER, name = "X-AUTH-TOKEN")
-    public ResponseEntity saveMonthlyPassengerInfo(@RequestBody MetaDataInfo metaDataInfo) {
+    public ApiResponse saveMonthlyPassengerInfo(@RequestBody FileInfo metaDataInfo) {
         passengerStatisticsService.saveMonthlyData(metaDataInfo.getYear(), metaDataInfo.getFilename());
-        return ResponseEntity.ok().build();
+        return ApiResponse.SUCCESS;
     }
 
     @PostMapping("/data/passengers/daily/average")

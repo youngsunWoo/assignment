@@ -1,11 +1,11 @@
-package com.nice.assignment.dto;
+package com.nice.assignment.metro.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class MetaDataInfo {
+public class FileInfo {
     Long year;
     String filename;
 }

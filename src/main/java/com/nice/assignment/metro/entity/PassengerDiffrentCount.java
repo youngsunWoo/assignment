@@ -1,4 +1,4 @@
-package com.nice.assignment.entity;
+package com.nice.assignment.metro.entity;
 
 import lombok.*;
 
@@ -11,8 +11,9 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @Builder
 @Entity
-public class PassengerCount {
+public class PassengerDiffrentCount {
     @Id
     private String stationName;
-    private Long passengerCount;
+    private Long maxCount;
+    private Long minCount;
 }

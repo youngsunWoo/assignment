@@ -1,10 +1,10 @@
-package com.nice.assignment.service;
+package com.nice.assignment.metro.service;
 
-import com.nice.assignment.dto.ConditionParamDto;
-import com.nice.assignment.dto.PassengerCountDto;
-import com.nice.assignment.dto.PassengerDiffrentCountDto;
-import com.nice.assignment.entity.MonthlyMetroPassengerInfo;
-import com.nice.assignment.repository.MonthlyPassengerInfoRepository;
+import com.nice.assignment.metro.dto.ConditionParamDto;
+import com.nice.assignment.metro.dto.PassengerCountDto;
+import com.nice.assignment.metro.dto.PassengerDiffrentCountDto;
+import com.nice.assignment.metro.entity.MonthlyMetroPassengerInfo;
+import com.nice.assignment.metro.repository.MonthlyPassengerInfoRepository;
 import com.univocity.parsers.common.record.Record;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

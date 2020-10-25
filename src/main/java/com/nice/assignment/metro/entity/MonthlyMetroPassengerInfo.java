@@ -1,4 +1,4 @@
-package com.nice.assignment.entity;
+package com.nice.assignment.metro.entity;
 
 import lombok.*;
 
@@ -10,6 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "MONTHLY_METRO_PASSENGER")
 public class MonthlyMetroPassengerInfo{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

@@ -1,12 +1,14 @@
 package com.nice.assignment.auth.controller;
 
 
+import com.nice.assignment.auth.dto.UserDto;
 import com.nice.assignment.auth.entity.User;
 import com.nice.assignment.auth.exception.UserRuntimeException;
 import com.nice.assignment.auth.repository.UserJpaRepository;
 import com.nice.assignment.auth.responce.ApiResponse;
 import com.nice.assignment.auth.responce.ApiResponseCode;
 import com.nice.assignment.config.JwtTokenProvider;
+import com.nice.assignment.metro.dto.FileInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -15,10 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
@@ -34,11 +33,10 @@ public class SignController {
 
     @Operation(summary = "로그인", description = "회원 로그인 API")
     @PostMapping(value = "/signin")
-    public ApiResponse<String> signin(@RequestParam String id,
-                                       @RequestParam String password) {
-        User user = userJpaRepository.findByUid(id).orElseThrow(
+    public ApiResponse<String> signin(@RequestBody UserDto userDto) {
+        User user = userJpaRepository.findByUid(userDto.getId()).orElseThrow(
                 () -> new UserRuntimeException(ApiResponseCode.BAD_REQUEST,"User Id is not Exist"));
-        if (!passwordEncoder.matches(password, user.getPassword()))
+        if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword()))
             throw new UserRuntimeException(ApiResponseCode.BAD_REQUEST,"Incorrect Password");
 
         return ApiResponse.of(jwtTokenProvider.createToken(String.valueOf(user.getMsrl()), user.getRoles()));
@@ -46,13 +44,11 @@ public class SignController {
 
     @Operation(summary = "가입", description = "회원가입 API")
     @PostMapping(value = "/signup")
-    public ApiResponse signup(@RequestParam String id,
-                              @RequestParam String password,
-                              @RequestParam String name) {
+    public ApiResponse signup(@RequestBody UserDto userDto) {
         userJpaRepository.save(User.builder()
-                .uid(id)
-                .password(passwordEncoder.encode(password))
-                .name(name)
+                .uid(userDto.getId())
+                .password(passwordEncoder.encode(userDto.getPassword()))
+                .name(userDto.getName())
                 .roles(Collections.singletonList("ROLE_ADMIN"))
                 .build());
         return ApiResponse.SUCCESS;
@@ -62,7 +58,6 @@ public class SignController {
     @Parameter(in = ParameterIn.HEADER, name = "X-AUTH-TOKEN", description = "API 인증토큰")
     @PostMapping(value = "/token")
     public ApiResponse signup() {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
         return ApiResponse.of(jwtTokenProvider.createToken(String.valueOf(user.getMsrl()), user.getRoles()));
