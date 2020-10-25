@@ -1,6 +1,7 @@
 package com.nice.assignment.auth.controller;
 
 
+import com.nice.assignment.auth.dto.LoginDto;
 import com.nice.assignment.auth.dto.UserDto;
 import com.nice.assignment.auth.entity.User;
 import com.nice.assignment.auth.exception.UserRuntimeException;
@@ -8,7 +9,6 @@ import com.nice.assignment.auth.repository.UserJpaRepository;
 import com.nice.assignment.auth.responce.ApiResponse;
 import com.nice.assignment.auth.responce.ApiResponseCode;
 import com.nice.assignment.config.JwtTokenProvider;
-import com.nice.assignment.metro.dto.FileInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -32,18 +32,18 @@ public class SignController {
     private final PasswordEncoder passwordEncoder;
 
     @Operation(summary = "로그인", description = "회원 로그인 API")
-    @PostMapping(value = "/signin")
-    public ApiResponse<String> signin(@RequestBody UserDto userDto) {
-        User user = userJpaRepository.findByUid(userDto.getId()).orElseThrow(
+    @PostMapping(value = "/sign-in")
+    public ApiResponse<String> signin(@RequestBody LoginDto loginDto) {
+        User user = userJpaRepository.findByUid(loginDto.getId()).orElseThrow(
                 () -> new UserRuntimeException(ApiResponseCode.BAD_REQUEST,"User Id is not Exist"));
-        if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword()))
+        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword()))
             throw new UserRuntimeException(ApiResponseCode.BAD_REQUEST,"Incorrect Password");
 
         return ApiResponse.of(jwtTokenProvider.createToken(String.valueOf(user.getMsrl()), user.getRoles()));
     }
 
     @Operation(summary = "가입", description = "회원가입 API")
-    @PostMapping(value = "/signup")
+    @PostMapping(value = "/sign-up")
     public ApiResponse signup(@RequestBody UserDto userDto) {
         userJpaRepository.save(User.builder()
                 .uid(userDto.getId())
@@ -56,7 +56,7 @@ public class SignController {
 
     @Operation(summary = "토큰 갱신", description = "토큰 갱신 API")
     @Parameter(in = ParameterIn.HEADER, name = "X-AUTH-TOKEN", description = "API 인증토큰")
-    @PostMapping(value = "/token")
+    @PostMapping(value = "/token-refresh")
     public ApiResponse signup() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User)authentication.getPrincipal();
