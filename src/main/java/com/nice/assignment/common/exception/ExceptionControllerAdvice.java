@@ -1,4 +1,4 @@
-package com.nice.assignment.auth.exception;
+package com.nice.assignment.common.exception;
 
 import com.nice.assignment.common.response.ApiResponse;
 import org.slf4j.Logger;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class ExceptionControllerAdvice {
     Logger logger = LoggerFactory.getLogger(ExceptionControllerAdvice.class);
 
-    @ExceptionHandler(UserRuntimeException.class)
-    protected ResponseEntity<ApiResponse<Object>> handleProductExceptionHandler(UserRuntimeException e) {
+    @ExceptionHandler(CustomRuntimeException.class)
+    protected ResponseEntity<ApiResponse<Object>> handleProductExceptionHandler(CustomRuntimeException e) {
         logger.error(e.getMessage(), e);
 
         ApiResponse<Object> response = new ApiResponse<>();

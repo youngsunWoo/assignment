@@ -8,8 +8,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ApiResponseCode implements ResponseCodeBase {
     SUCCESS(HttpStatus.OK, 200, "OK"),
-    SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, -500, "Server Error"),
-    BAD_REQUEST(HttpStatus.BAD_REQUEST, -400, "Incorrect Request"),
+    DATA_NOT_FOUND(HttpStatus.OK, 404, "DATA_NOT_FOUND"),
+    SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, -500, "SERVER ERROR"),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, -400, "INCORRECT REQUEST"),
 
     ;
     private final HttpStatus status;

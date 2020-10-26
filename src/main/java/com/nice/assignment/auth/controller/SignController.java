@@ -4,7 +4,7 @@ package com.nice.assignment.auth.controller;
 import com.nice.assignment.auth.dto.LoginDto;
 import com.nice.assignment.auth.dto.UserDto;
 import com.nice.assignment.auth.entity.User;
-import com.nice.assignment.auth.exception.UserRuntimeException;
+import com.nice.assignment.common.exception.CustomRuntimeException;
 import com.nice.assignment.auth.repository.UserJpaRepository;
 import com.nice.assignment.common.response.ApiResponse;
 import com.nice.assignment.common.response.ApiResponseCode;
@@ -35,9 +35,9 @@ public class SignController {
     @PostMapping(value = "/sign-in")
     public ApiResponse<String> signin(@RequestBody LoginDto loginDto) {
         User user = userJpaRepository.findByUid(loginDto.getId()).orElseThrow(
-                () -> new UserRuntimeException(ApiResponseCode.BAD_REQUEST,"User Id is not Exist"));
+                () -> new CustomRuntimeException(ApiResponseCode.BAD_REQUEST,"User Id is not Exist"));
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword()))
-            throw new UserRuntimeException(ApiResponseCode.BAD_REQUEST,"Incorrect Password");
+            throw new CustomRuntimeException(ApiResponseCode.BAD_REQUEST,"Incorrect Password");
 
         return ApiResponse.of(jwtTokenProvider.createToken(String.valueOf(user.getMsrl()), user.getRoles()));
     }

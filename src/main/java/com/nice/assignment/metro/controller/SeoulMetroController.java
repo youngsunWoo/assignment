@@ -34,21 +34,28 @@ public class SeoulMetroController {
         return ApiResponse.SUCCESS;
     }
 
-    @PostMapping("/data/passengers/daily/average")
-    public ApiResponse<List<PassengerCountDto>> getAverageDaily(@RequestBody ConditionParamDto conditionParamDto) {
-        log.debug("{}\tprams={}", ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(), conditionParamDto.toString());
-        return ApiResponse.of(passengerStatisticsService.getDailyCountRank(conditionParamDto));
+    @GetMapping("/data/passengers/daily/average")
+    public ApiResponse<List<PassengerCountDto>> getAverageDaily(@Parameter(description = "검색 대상 연도", required = true, example = "2019") @RequestParam Long year,
+                                                                @Parameter(description = "정렬 기준(true : 오름차순, false : 내림차순)", required = true) @RequestParam boolean ascending,
+                                                                @Parameter(description = "검색 갯수", required = true, example = "10") @RequestParam Long rankNum) {
+        log.debug("{}\tprams={},{},{}", ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(), year, ascending, rankNum);
+        return ApiResponse.of(passengerStatisticsService.getDailyCountRank(ConditionParamDto.builder().year(year).ascending(ascending).rankNum(rankNum).build())
+        );
     }
 
-    @PostMapping("/data/passengers/monthly/average")
-    public ApiResponse<List<PassengerCountDto>> getAverageMonthly(@RequestBody ConditionParamDto conditionParamDto) {
-        log.debug("{}\tprams={}", ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(), conditionParamDto.toString());
-        return ApiResponse.of(passengerStatisticsService.getMonthlyCountRank(conditionParamDto));
+    @GetMapping("/data/passengers/monthly/average")
+    public ApiResponse<List<PassengerCountDto>> getAverageMonthly(@Parameter(description = "검색 대상 연도", required = true, example = "2019") @RequestParam Long year,
+                                                                  @Parameter(description = "정렬 기준(true : 오름차순, false : 내림차순)", required = true) @RequestParam boolean ascending,
+                                                                  @Parameter(description = "검색 갯수", required = true, example = "1") @RequestParam Long rankNum)  {
+        log.debug("{}\tprams={},{},{}", ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(), year, ascending, rankNum);
+        return ApiResponse.of(passengerStatisticsService.getMonthlyCountRank(ConditionParamDto.builder().year(year).ascending(ascending).rankNum(rankNum).build()));
     }
 
-    @PostMapping("/data/passengers/monthly/difference")
-    public ApiResponse<List<PassengerCountDto>> getdifference(@RequestBody ConditionParamDto conditionParamDto) {
-        log.debug("{}\tprams={}", ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(), conditionParamDto.toString());
-        return ApiResponse.of(passengerStatisticsService.getMonthlyDiffRank(conditionParamDto));
+    @GetMapping("/data/passengers/monthly/difference")
+    public ApiResponse<List<PassengerCountDto>> getdifference(@Parameter(description = "검색 대상 연도", required = true, example = "2019") @RequestParam Long year,
+                                                              @Parameter(description = "정렬 기준(true : 오름차순, false : 내림차순)", required = true) @RequestParam boolean ascending,
+                                                              @Parameter(description = "검색 갯수", required = true, example = "1") @RequestParam Long rankNum)   {
+        log.debug("{}\tprams={},{},{}", ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString(), year, ascending, rankNum);
+        return ApiResponse.of(passengerStatisticsService.getMonthlyDiffRank(ConditionParamDto.builder().year(year).ascending(ascending).rankNum(rankNum).build()));
     }
 }

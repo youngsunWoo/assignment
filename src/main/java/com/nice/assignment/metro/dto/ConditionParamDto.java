@@ -1,14 +1,12 @@
 package com.nice.assignment.metro.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @ToString
 public class ConditionParamDto {
     @Schema(description = "검색 대상 연도", required = true, example = "2019")

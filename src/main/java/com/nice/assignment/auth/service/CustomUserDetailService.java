@@ -1,6 +1,6 @@
 package com.nice.assignment.auth.service;
 
-import com.nice.assignment.auth.exception.UserRuntimeException;
+import com.nice.assignment.common.exception.CustomRuntimeException;
 import com.nice.assignment.auth.repository.UserJpaRepository;
 import com.nice.assignment.common.response.ApiResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String userPk) {
         return userJpaRepository.findById(Long.valueOf(userPk)).orElseThrow(
-                () -> new UserRuntimeException(ApiResponseCode.BAD_REQUEST,"User Id is not Exist")
+                () -> new CustomRuntimeException(ApiResponseCode.BAD_REQUEST,"User Id is not Exist")
         );
     }
 }

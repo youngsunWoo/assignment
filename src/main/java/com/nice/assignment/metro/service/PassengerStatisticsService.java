@@ -1,12 +1,17 @@
 package com.nice.assignment.metro.service;
 
+import com.nice.assignment.common.exception.CustomRuntimeException;
+import com.nice.assignment.common.response.ApiResponseCode;
 import com.nice.assignment.metro.dto.ConditionParamDto;
 import com.nice.assignment.metro.dto.PassengerCountDto;
 import com.nice.assignment.metro.dto.PassengerDiffrentCountDto;
 import com.nice.assignment.metro.entity.MonthlyMetroPassengerInfo;
+import com.nice.assignment.metro.entity.PassengerCount;
+import com.nice.assignment.metro.entity.PassengerDiffrentCount;
 import com.nice.assignment.metro.repository.MonthlyPassengerInfoRepository;
 import com.univocity.parsers.common.record.Record;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +38,12 @@ public class PassengerStatisticsService {
     }
 
     public List<PassengerCountDto> getDailyCountRank(ConditionParamDto conditionParamDto) {
-        return monthlyPassengerInfoRepository.getYearlyCount(conditionParamDto.getYear()).stream()
+        List<PassengerCount> list = monthlyPassengerInfoRepository.getYearlyCount(conditionParamDto.getYear());
+        if (ObjectUtils.isEmpty(list)) {
+            throw new CustomRuntimeException(ApiResponseCode.DATA_NOT_FOUND);
+        }
+
+        return list.stream()
                 .map(PassengerCountDto::of)
                 .sorted(conditionParamDto.isAscending() ?
                         Comparator.comparing(PassengerCountDto::getPassengerCount) :
@@ -47,7 +57,12 @@ public class PassengerStatisticsService {
     }
 
     public List<PassengerCountDto> getMonthlyCountRank(ConditionParamDto conditionParamDto) {
-        return monthlyPassengerInfoRepository.getYearlyCount(conditionParamDto.getYear()).stream()
+        List<PassengerCount> list = monthlyPassengerInfoRepository.getYearlyCount(conditionParamDto.getYear());
+        if (ObjectUtils.isEmpty(list)) {
+            throw new CustomRuntimeException(ApiResponseCode.DATA_NOT_FOUND);
+        }
+
+        return list.stream()
                 .map(PassengerCountDto::of)
                 .sorted(conditionParamDto.isAscending() ?
                         Comparator.comparing(PassengerCountDto::getPassengerCount) :
@@ -61,7 +76,12 @@ public class PassengerStatisticsService {
     }
 
     public List<PassengerCountDto> getMonthlyDiffRank(ConditionParamDto conditionParamDto) {
-        return monthlyPassengerInfoRepository.getDiffMaxAndMin(conditionParamDto.getYear()).stream()
+        List<PassengerDiffrentCount> list = monthlyPassengerInfoRepository.getDiffMaxAndMin(conditionParamDto.getYear());
+        if (ObjectUtils.isEmpty(list)) {
+            throw new CustomRuntimeException(ApiResponseCode.DATA_NOT_FOUND);
+        }
+
+        return list.stream()
                 .map(PassengerDiffrentCountDto::of)
                 .sorted(conditionParamDto.isAscending() ?
                         Comparator.comparing(PassengerDiffrentCountDto::getDiff) :
