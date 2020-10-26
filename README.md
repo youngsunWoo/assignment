@@ -76,7 +76,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
         - 성능측정 조건 : JDK 8 / 3,173,958 rows / 모든 data에 "(quotes)가 존재 경우  
 - CSV 파싱 라이브러리 사용현황  
 
-|순위|라이브러리 명|사용량|최신 릴리즈|
+|순위|라이브러리|사용량|최신 릴리즈|
 |--|-----|---|---|
 |1 |Apache Commons CSV            | 763 usages |2020.02|
 |2 | ~~OpenCSV~~                  | 608 usages |2011.07|
@@ -90,18 +90,19 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 |10|~~Java CVS Reader and Writer~~| 70 usages  |2008.02|
  
 - CSV 파싱 라이브러리 성능비교  
-|순위|라이브러리|평균속도|성능대비 % |최소수행시간 |최대수행시간|
-|--|------|-----|---|---|---|
-|1|**`uniVocity CSV parser`**|	855 ms|	Best time!|	839 ms|	870 ms
-|2|SimpleFlatMapper CSV parser|	964 ms|	12%	|959 ms|	971 ms
-|3|Jackson CSV parser|	1023 ms|	19%	|1009 ms|	1058 ms
-|4|Diergo Easy CSV Streamable|	1385 ms|	61%	|1378 ms|	1394 ms
-|5|Product Collections parser|	1388 ms|	62%	|1386 ms|	1391 ms
-|6|Java CSV Parser|	1642 ms|	92%	|1635 ms|	1650 ms
-|7|JCSV Parser|	1756 ms|	105%	|1739 ms|	1765 ms
-|8|Simple CSV parser|	1813 ms	|112%	| 1804 ms |	1841 ms
-|9|Gen-Java CSV|	1954 ms|	128%	|1950 ms|	1961 ms
-|10|SuperCSV|	1989 ms|	132%	|1975 ms|	2001 ms
+
+|순위|라이브러리|평균속도|성능대비 % |최소수행시간 |최대수행시간|  
+|--|-----|---|---|---|---|
+|1|**`uniVocity CSV parser`**|	855 ms|	Best time!|	839 ms|	870 ms|  
+|2|SimpleFlatMapper CSV parser|	964 ms|	12%	|959 ms|	971 ms|  
+|3|Jackson CSV parser|	1023 ms|	19%	|1009 ms|	1058 ms|  
+|4|Diergo Easy CSV Streamable|	1385 ms|	61%	|1378 ms|	1394 ms|  
+|5|Product Collections parser|	1388 ms|	62%	|1386 ms|	1391 ms|  
+|6|Java CSV Parser|	1642 ms|	92%	|1635 ms|	1650 ms|  
+|7|JCSV Parser|	1756 ms|	105%	|1739 ms|	1765 ms|  
+|8|Simple CSV parser|	1813 ms	|112%	| 1804 ms |	1841 ms|  
+|9|Gen-Java CSV|	1954 ms|	128%	|1950 ms|	1961 ms|  
+|10|SuperCSV|	1989 ms|	132%	|1975 ms|	2001 ms|  
 
 ## 고려 사항 
 
