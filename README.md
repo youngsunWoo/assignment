@@ -1,4 +1,4 @@
-# 서울교통공사 승하차 순위 데이터 적재 및 조회용API 개발
+# 서울교통공사 승하차 순위 데이터 적재 및 조회용 API 개발
 
 ## 목차
 - [개발환경 및 라이브러리](#개발환경-및-라이브러리)
@@ -6,11 +6,12 @@
 - [과제 요구사항 및 결과](#과제-요구사항-및-결과)
 - [고려 사항](#고려-사항)
 - [시연](#시연)
+- [Reference](#Reference)
 
 
 ## 빌드 및 실행
 ### 터미널 환경
-Java(openjdk.8), Docker는 설치되어 있다고 가정한다.
+Java(openjdk 1.8), Docker는 설치되어 있다고 가정한다.
 
 **Builf the Application** 
 ```
@@ -29,12 +30,13 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 ## 개발환경 및 라이브러리
 
 #### openkdk 1.8
-- 무료로 사용 가능한 오픈소스 기반의 openjdk.8 버전을 사용
+- 무료로 사용 가능한 오픈소스 기반의 openjdk 1.8 버전을 사용
 
 #### Spring 2.3.4
 - 도커 컨테이너 환경으로 실행 할 수 있도록 공식적으로 이미지 빌드를 지원하는 2.3.X 이상의 버전
 - 그 중 현재(2020.10) 가장 최신 버전인 2.3.4 사용
 
+#### gradle 
 
 #### Spring Security
 - REST API 인증(Authentication) 구현  
@@ -52,7 +54,6 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - 스프링 부트의 기본으로 포함되어 있어 별도로 라이브러리 추가가 필요없으며 application.properties 설정으로 적용가능 
 - log4j, log4j2에 비해 성능이 우수함
 
-
 #### Springdoc
 - API 문서 작성 및 시연화면 구현
 - Spring fox에 비해 후발주자로 사용성이 편리하고 버그대응을 잘하는 Springdoc 사용
@@ -69,7 +70,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - 라이브러리 선정기준   
     - 안정성   
         - 사용량이 가장 많은 라이브러리 Top 10중에 선정  
-        - 2020이전 릴리즈 되지 않은 라이브러리 제외 
+        - 2020 이후 릴리즈 되지 않은 라이브러리 제외 
     - 성능  
         - JDK8 기준 가장 처리속도가 빠른 라이브러리 Top 10 선정
         - 성능측정 조건 : JDK 8 / 3,173,958 rows / 모든 data에 "(quotes)가 존재 경우  
@@ -89,8 +90,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 |10|~~Java CVS Reader and Writer~~| 70 usages  |2008.02|
  
 - CSV 파싱 라이브러리 성능비교  
-
-|순위|라이브러리|평균속도|	성능대비 % |최소수행시간 |최대수행시간|
+|순위|라이브러리|평균속도|성능대비 % |최소수행시간 |최대수행시간|
 |--|------|-----|---|---|---|
 |1|**`uniVocity CSV parser`**|	855 ms|	Best time!|	839 ms|	870 ms
 |2|SimpleFlatMapper CSV parser|	964 ms|	12%	|959 ms|	971 ms
@@ -102,6 +102,42 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 |8|Simple CSV parser|	1813 ms	|112%	| 1804 ms |	1841 ms
 |9|Gen-Java CSV|	1954 ms|	128%	|1950 ms|	1961 ms
 |10|SuperCSV|	1989 ms|	132%	|1975 ms|	2001 ms
+
+## 고려 사항 
+
+#### API 인증
+- 데이터파일(.csv)저장 API는 인증 필요 
+- 조회 API는 누구나 사용 가능
+ 
+#### API 설계
+- REST API 
+  - HTTP Method와 URI만으로 API의 기능을 유추 가능
+    - HTTP Method   
+      >GET : 조회    
+      >POST : 저장  
+    - URI  
+      >/v1/seoul-metro/passengers/daliy/average  
+      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/(일간)/&nbsp;&nbsp;(평균)   
+      >/v1/seoul-metro/passengers/monthly/average  
+      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;(월간)&nbsp;&nbsp;/&nbsp;&nbsp;(평균) 
+      
+- 확장성/재사용성 
+  - 다른 연도의 자료가 들어오더라도 대응 가능
+     - 저장할 데이터의 연도를 request parmeter으로 전달 받아 저장 
+    - 조회시 연도를 request parmeter로 전달받아 조건으로 사용
+  - 파일이름이나 경로가 변경되도라도 대능 가능  
+    - 파일명을 request parmeter로 전달 받음  
+    - 파일 경로는 apllication.yaml에 명시해 변수로 주입받아 사용   
+  - 요구사항이 변화되더라도 소스 변경없이 적용 가능
+    - 상위/하위 : 정렬기준을 request parmeter로 전달받아 조건으로 사용 
+    - 출력 갯수 : 출력할 갯수를 request parmeter로 전달받아 조건으로 사용
+
+#### DB 인덱싱
+- DB INDEX
+  - 파일은 연도별 파일로 해당 자료의 `입력(insert)`은 1회/연 발생으로 가정 
+  - 자료의 `수정(update)` 및 `삭제(delete)` 는 거의 발생하지 않을 것으로 가정
+  - 이후 주 요청은 `조회(read)`로 예상
+  - 따라서 index를 추가해도 입력/수정/삭제의 성능 저하보다 조회의 성능 향상을 우선하여 인덱스를 생성
 
 ## 과제 요구사항 및 결과
 ### 필수사항
@@ -309,43 +345,35 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
   }
   ```
 
-## 고려 사항 
-
-#### API 인증
-- 데이터파일(.csv)저장 API는 인증 필요 
-- 조회 API는 누구나 사용 가능
- 
-#### API 설계
-- REST API 
-  - HTTP Method와 URI만으로 API의 기능을 유추 가능
-    - HTTP Method   
-      >GET : 조회    
-      >POST : 저장  
-    - URI  
-      >/v1/seoul-metro/passengers/daliy/average  
-      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/(일간)/&nbsp;&nbsp;(평균)   
-      >/v1/seoul-metro/passengers/monthly/average  
-      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;(월간)&nbsp;&nbsp;/&nbsp;&nbsp;(평균) 
-      
-- 확장성/재사용성 
-  - 다른 연도의 자료가 들어오더라도 대응 가능
-     - 저장할 데이터의 연도를 request parmeter으로 전달 받아 저장 
-    - 조회시 연도를 request parmeter로 전달받아 조건으로 사용
-  - 파일이름이나 경로가 변경되도라도 대능 가능  
-    - 파일명을 request parmeter로 전달 받음  
-    - 파일 경로는 apllication.yaml에 명시해 변수로 주입받아 사용   
-  - 요구사항이 변화되더라도 소스 변경없이 적용 가능
-    - 상위/하위 : 정렬기준을 request parmeter로 전달받아 조건으로 사용 
-    - 출력 갯수 : 출력할 갯수를 request parmeter로 전달받아 조건으로 사용
-
-#### DB 인덱싱
-- DB INDEX
-  - 파일은 연도별 파일로 해당 자료의 `입력(insert)`은 1회/연 발생으로 가정 
-  - 자료의 `수정(update)` 및 `삭제(delete)` 는 거의 발생하지 않을 것으로 가정
-  - 이후 주 요청은 `조회(read)`로 예상
-  - 따라서 index를 추가해도 입력/수정/삭제의 성능 저하보다 조회의 성능 향상을 우선하여 인덱스를 생성
-
 
 ## 시연
-- 참고용 과제실행화면
-- [http://localhost:8080](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config/)
+#### [http://localhost:8080](http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config/)
+- (참고) 과제실행화면
+
+#### 필수사항
+1. API 명세서 작성
+ ![api_document](docs_contents/api-document.png)
+2. 데이터파일(.csv)의 각 레코드를 데이터베이스에 저장하는 API 개발
+ ![data-upload](docs_contents/data-upload.png)
+3. 일평균 인원이 가장 많은 상위 10개의 역 명과 인원 수를 출력하는 API 개발
+ ![get-daily-average](docs_contents/get-daily-average.png)
+4. 월 인원수 평균이 가장 낮은 역 명과 인원수를 출력하는 API 개발
+ ![get-monthly-average](docs_contents/get-monthly-average.png)
+5. 월 인원수 최대 최소의 차이가 가장 큰 역 명을 출력하는 API 개발
+ ![get-monthly-different](docs_contents/get-monthly-different.png)
+(참고)데이터 미 존재시 응답
+ ![data-not-exsit](docs_contents/data-not-exsit.png)
+
+### 선택사항 - API 인증(Authentication)
+1. 회원가입 
+ ![sign-up](docs_contents/auth-sign-up.png)
+2. 로그인(토큰발급)
+- 로그인 성공
+ ![sign-in-success](docs_contents/auth-sign-in-success.png)
+- 로그인 실패
+ ![sign-in-fail](docs_contents/auth-sign-in-fail.png)
+
+토큰갱신
+ ![token-refresh](docs_contents/auth-token-refresh-success.png)
+
+
