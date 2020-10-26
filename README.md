@@ -114,21 +114,21 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
   - HTTP Method와 URI만으로 API의 기능을 유추 가능
     - HTTP Method   
       >GET : 조회    
-      >POST : 저장  
+      POST : 저장  
     - URI  
       >/v1/seoul-metro/passengers/daliy/average  
-      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/(일간)/&nbsp;&nbsp;(평균)   
-      >/v1/seoul-metro/passengers/monthly/average  
-      >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;(월간)&nbsp;&nbsp;/&nbsp;&nbsp;(평균) 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/(일간)/&nbsp;&nbsp;(평균)   
+      /v1/seoul-metro/passengers/monthly/average  
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(서울지하철) /&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(승객)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;(월간)&nbsp;&nbsp;/&nbsp;&nbsp;(평균) 
       
 - 확장성/재사용성 
-  - 다른 연도의 자료가 들어오더라도 대응 가능
+  - 다른 연도의 자료 대응
      - 저장할 데이터의 연도를 request parmeter으로 전달 받아 저장 
     - 조회시 연도를 request parmeter로 전달받아 조건으로 사용
-  - 파일이름이나 경로가 변경되도라도 대능 가능  
+  - 파일이름이나 경로가 변경 대응  
     - 파일명을 request parmeter로 전달 받음  
     - 파일 경로는 apllication.yaml에 명시해 변수로 주입받아 사용   
-  - 요구사항이 변화되더라도 소스 변경없이 적용 가능
+  - api 조회조건 변경 대응 가능
     - 상위/하위 : 정렬기준을 request parmeter로 전달받아 조건으로 사용 
     - 출력 갯수 : 출력할 갯수를 request parmeter로 전달받아 조건으로 사용
 
@@ -142,7 +142,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 ## 과제 요구사항 및 결과
 ### 필수사항
 #### 1. API 명세서 작성
-- sewgger 문서로 대체
+- swagger 문서로 대체
 #### 2. 데이터파일(.csv)의 각 레코드를 데이터베이스에 저장하는 API 개발
 - Request
   - url
