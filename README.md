@@ -147,7 +147,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - Request
   - url
   ```
-  http://localhost:8080/v1/seoul-metro/data/passengers/daily/average
+  POST http://localhost:8080/v1/seoul-metro/data/passengers/daily/average
   ```
   - header
   ```
@@ -171,7 +171,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - Request
   - url
   ```
-  http://localhost:8080/v1/seoul-metro/data/passengers/daily/average
+  GET http://localhost:8080/v1/seoul-metro/data/passengers/daily/average
   ```
   - parameter
   ```
@@ -235,7 +235,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - Request
   - url
   ```
-  http://localhost:8080/v1/seoul-metro/data/passengers/monthly/average
+  GET http://localhost:8080/v1/seoul-metro/data/passengers/monthly/average
   ```
   - parameter
   ```
@@ -263,12 +263,19 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - Request
   - url
   ```
-  http://localhost:8080/v1/seoul-metro/data/passengers/monthly/difference
+  GET http://localhost:8080/v1/seoul-metro/data/passengers/monthly/difference
   ```
   - parameter
+    ```
+    {
+      "year": 2019,        //조회 대상 연도
+      "ascending": false,   //정렬기준(true:오름차순, false:내림차순 )
+      "rankNum": 1        //출력갯수
+    }
+    ```  
 - Response
 
-  ``` ```
+  ```
     {
       "code": 200,
       "msg": "OK",
@@ -285,7 +292,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - Request
   - url
   ```
-  http://localhost:8080/v1/sign-up
+  POST http://localhost:8080/v1/sign-up
   ```
   - parameter
   ```
@@ -307,7 +314,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - Request
   - url
   ```
-  http://localhost:8080/v1/sign-in
+  POST http://localhost:8080/v1/sign-in
   ```
   - parameter
   ```
@@ -330,7 +337,7 @@ $ docker run -p 8080:8080 -t assignment:0.0.1-SNAPSHOT
 - Request
   - url
   ```
-  http://localhost:8080/v1/token-refresh
+  POST  http://localhost:8080/v1/token-refresh
   ```
   - header
   ```
